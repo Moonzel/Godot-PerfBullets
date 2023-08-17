@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://duq34uom7vsr6"]
+
+[ext_resource type="Script" path="res://addons/PerfBullets/Examples/player.gd" id="1_askqf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vccqo"]
+size = Vector2(18, 16)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_esu1l"]
+size = Vector2(50, 50)
+
+[node name="Player" type="Area2D"]
+texture_filter = 1
+script = ExtResource("1_askqf")
+power = 300.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vccqo")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(9.53674e-07, 0)
+scale = Vector2(0.36, 0.32)
+texture = SubResource("PlaceholderTexture2D_esu1l")
+
+[connection signal="area_shape_entered" from="." to="." method="_on_area_shape_entered"]
+[connection signal="body_shape_entered" from="." to="." method="_on_body_shape_entered"]

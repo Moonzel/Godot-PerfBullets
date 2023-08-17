@@ -1,0 +1,38 @@
+[gd_scene load_steps=7 format=3 uid="uid://hlr5sueqo158"]
+
+[ext_resource type="Texture2D" uid="uid://bb41tvrma8x57" path="res://icon.svg" id="1_161g3"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="2_8av7u"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_j2p7r"]
+[ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="4_in8cm"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o6m1g"]
+
+[sub_resource type="BulletType" id="BulletType_wcrsq"]
+_shape = SubResource("CapsuleShape2D_o6m1g")
+mask = 1
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Spawner" type="Spawner" parent="."]
+startMode = 1
+bulletType = SubResource("BulletType_wcrsq")
+texture = ExtResource("1_161g3")
+
+[node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
+script = ExtResource("2_8av7u")
+topLeft = NodePath("Node2D")
+bottomRight = NodePath("Node2D2")
+
+[node name="Node2D" type="Node2D" parent="BulletBorder"]
+
+[node name="Node2D2" type="Node2D" parent="BulletBorder"]
+position = Vector2(604, 227)
+
+[node name="PatternManager" type="Node" parent="."]
+script = ExtResource("3_j2p7r")
+
+[node name="Spawner" type="Timer" parent="PatternManager"]
+wait_time = 1.5
+one_shot = true
+
+[node name="Player" parent="." instance=ExtResource("4_in8cm")]

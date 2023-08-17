@@ -1,0 +1,136 @@
+[gd_scene load_steps=13 format=3 uid="uid://crydyqeccs3x2"]
+
+[ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="2_chvxh"]
+[ext_resource type="Texture2D" uid="uid://e7x81ektkcjo" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_imimj"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_1uslb"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="4_kwusl"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jc7ax"]
+
+[sub_resource type="BulletType" id="BulletType_8p4c3"]
+_shape = SubResource("CircleShape2D_jc7ax")
+animationSpeed = 1.0
+mask = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dv71b"]
+
+[sub_resource type="BulletType" id="BulletType_hp6qd"]
+_shape = SubResource("CircleShape2D_dv71b")
+animationSpeed = 1.0
+mask = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o0hcj"]
+
+[sub_resource type="BulletType" id="BulletType_s21wu"]
+_shape = SubResource("CircleShape2D_o0hcj")
+animationSpeed = 1.0
+mask = 1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j352b"]
+
+[sub_resource type="BulletType" id="BulletType_1wf00"]
+_shape = SubResource("CircleShape2D_j352b")
+animationSpeed = 1.0
+mask = 1
+
+[node name="Game" type="Node2D"]
+position = Vector2(1, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_chvxh")]
+position = Vector2(551, 570)
+power = 400.0
+
+[node name="Time1" type="Spawner" parent="." node_paths=PackedStringArray("trackedNode") groups=["Spawner"]]
+startMode = 1
+spawnerMode = 1
+bulletType = SubResource("BulletType_8p4c3")
+poolCount = 10000
+fireRate = 0.084
+bulletsPerRadius = 10
+degreesBetweenRadii = 180.0
+maxSpin = 0.5
+minSpin = -2.0
+spinAcceleration = 1.0
+restartAtSpin = false
+trackedNode = NodePath("../Player")
+homingWeight = 0.1
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(543, 193)
+texture = ExtResource("2_imimj")
+
+[node name="PatternManager" type="Node" parent="."]
+script = ExtResource("3_1uslb")
+
+[node name="Time1" type="Timer" parent="PatternManager"]
+process_callback = 0
+wait_time = 8.0
+one_shot = true
+
+[node name="tl" type="Timer" parent="PatternManager"]
+one_shot = true
+
+[node name="mid" type="Timer" parent="PatternManager"]
+wait_time = 4.0
+one_shot = true
+
+[node name="tr" type="Timer" parent="PatternManager"]
+wait_time = 6.0
+one_shot = true
+
+[node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
+script = ExtResource("4_kwusl")
+topLeft = NodePath("Node2D")
+bottomRight = NodePath("Node2D2")
+
+[node name="Node2D" type="Node2D" parent="BulletBorder"]
+
+[node name="Node2D2" type="Node2D" parent="BulletBorder"]
+position = Vector2(1151, 647)
+
+[node name="tl" type="Spawner" parent="." node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_hp6qd")
+numberOfShots = 5
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+trackedNode = NodePath("../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(137, 111)
+texture = ExtResource("2_imimj")
+
+[node name="mid" type="Spawner" parent="." node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_s21wu")
+numberOfShots = 10
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 4
+trackedNode = NodePath("../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(537, 92)
+texture = ExtResource("2_imimj")
+
+[node name="tr" type="Spawner" parent="." node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_1wf00")
+numberOfShots = 5
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+trackedNode = NodePath("../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(1016, 89)
+texture = ExtResource("2_imimj")
+
+[connection signal="bullet_hit" from="Time1" to="Player" method="_on_time_1_bullet_hit"]
