@@ -1,8 +1,5 @@
 # Godot PerfBullets
-
-<p align="center">
-	<img src="https://github.com/Moonzel/Amends/assets/96361809/3d94ebb4-3300-4b90-ac2a-49d707deb3bb" width="360" height="360">
-</p>
+![PerfBulletsLogo - Copy](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/e3c2392a-09f8-4cf9-b98b-f213b233ae62)
 
 ## Spawn thousands of bullets or particles on screen in an extremely performant way!
 
@@ -62,7 +59,8 @@ In the repository, there is a folder named `examples` that holds a few examples 
 **Along with the methods and properties stated, each property also has a setter and getter function in this format:**
  `set_propertyname()`, `get_propertyname()` (with underscores in-between spaces)
 
-### @ Spawner ![Spawner](https://github.com/Moonzel/Amends/assets/96361809/4c9d9c6e-86ab-4ec9-b3c3-32c5ab3dc756)
+### @ Spawner ![Spawner](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/ae8e9811-520f-4e99-a0cc-1b5c2e6c2598)
+
 
 #### The main class of the plugin. This is the base class that manages how bullets are spawned and how they move every frame. Here you can control almost every attribute of how the bullets function including spin, homing, animation, gravity, etc. It also contains the option to choose how the node is started, and what process it uses to run.
 
@@ -129,7 +127,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 </details>
 
-### @ BulletType ![BulletType](https://github.com/Moonzel/Amends/assets/96361809/aa78a189-5e57-4c28-ae06-84de085725e3)
+### @ BulletType ![BulletType](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/711d80b6-13c0-4008-ba4d-847d1cb5edc8)
 
 #### A resource that is used for the Spawner's `Bullet Type` property. This decides certain key attributes of the bullets spawned in that Spawner, and since it is a resource, you can save the resource as a specific type of bullet, and use other Spawners that use the resource. Every bullet in the Spawner shares these properties. Try to not edit these settings after runtime, as many are set once when the Spawner is added to the tree. 
 
@@ -151,7 +149,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 </details>
 
-### @ BulletBorder ![BulletBorder](https://github.com/Moonzel/Amends/assets/96361809/cb88e923-0ad9-40b0-8167-3c22a2a093ac)
+### @ BulletBorder ![BulletBorder](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/a3392bf8-b281-4463-b9ce-aa82de0c431d)
 
 #### A class that sets a rectangular border with two Node2Ds. When a bullet passes the border, it adds bullets back into the pool and deactivates them. In the editor, you can place these Node2Ds to designate the rectangle. It is recommended to place them just outside the screen, so the player does not see the bullets despawning.
 
@@ -173,7 +171,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 </details>
 
-### @ PatternManager ![PatternManager](https://github.com/Moonzel/Amends/assets/96361809/587b1735-3b17-4a93-995c-3878cb306ec7)
+### @ PatternManager ![PatternManager](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/3c8d1c62-26f8-4402-a6d3-0e81934fb8c6)
 
 #### This node is set up to be a place where you can control the timings of when each node is fired, usually placed at the same level in the scene as the Spawners. When you add a Spawner to the scene, you can add a corresponding Timer node as a child of the PatternManager. When this Timer times out, it will send a signal with its name (which should also be the EXACT name of the Spawner) and will activate it. You have the option of either using the PatternManager method or instantiating the nodes when you want to use them (`ONSTART`).
 
@@ -185,7 +183,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 </details>
 
-### @ BulProps ![BulProps](https://github.com/Moonzel/Amends/assets/96361809/4a6f79d8-3dd3-4297-9614-383b33f88a8a)
+### @ BulProps ![BulProps](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/c7f5f0ac-517b-4cdf-8906-8563a0da4867)
 
 #### It is the resource associated with each bullet that is spawned. It is mostly internal within the Spawner class. Can be edited directly, but only by `get_bullet_from_index()`.
 
