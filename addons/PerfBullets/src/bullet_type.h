@@ -24,7 +24,7 @@ private:
     float acceleration = 0.0; 
     float minSpeed = -9999999.0;
     float maxSpeed = 9999999.0;
-    int mask;
+    int mask = 1;
     bool collideWithBodies = false;
     bool collideWithAreas = true;
     float scale = 1.0;

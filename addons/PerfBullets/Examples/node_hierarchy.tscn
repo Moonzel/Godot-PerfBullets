@@ -1,0 +1,151 @@
+[gd_scene load_steps=18 format=3 uid="uid://d4ihdm16p0fys"]
+
+[ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="1_ayodl"]
+[ext_resource type="Texture2D" uid="uid://bq4fs3pbpvdwl" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_kmiho"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_4pmr3"]
+[ext_resource type="Script" path="res://PatternSpawnerData.gd" id="4_jgga3"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="5_nco0f"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jc7ax"]
+
+[sub_resource type="BulletType" id="BulletType_8p4c3"]
+_shape = SubResource("CircleShape2D_jc7ax")
+animationSpeed = 1.0
+
+[sub_resource type="Resource" id="Resource_moc8b"]
+script = ExtResource("4_jgga3")
+ID = 1
+time = 8.0
+timerMode = 0
+
+[sub_resource type="Resource" id="Resource_a6w5m"]
+script = ExtResource("4_jgga3")
+ID = 2
+time = 1.0
+timerMode = 0
+
+[sub_resource type="Resource" id="Resource_v05yb"]
+script = ExtResource("4_jgga3")
+ID = 3
+time = 4.0
+timerMode = 0
+
+[sub_resource type="Resource" id="Resource_jjfu8"]
+script = ExtResource("4_jgga3")
+ID = 4
+time = 6.0
+timerMode = 0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dv71b"]
+
+[sub_resource type="BulletType" id="BulletType_hp6qd"]
+_shape = SubResource("CircleShape2D_dv71b")
+animationSpeed = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_o0hcj"]
+
+[sub_resource type="BulletType" id="BulletType_s21wu"]
+_shape = SubResource("CircleShape2D_o0hcj")
+animationSpeed = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j352b"]
+
+[sub_resource type="BulletType" id="BulletType_1wf00"]
+_shape = SubResource("CircleShape2D_j352b")
+animationSpeed = 1.0
+
+[node name="Game" type="Node2D"]
+position = Vector2(1, 1)
+
+[node name="Player" parent="." instance=ExtResource("1_ayodl")]
+position = Vector2(551, 570)
+power = 400.0
+
+[node name="Time1" type="Spawner" parent="Player" node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+spawnerMode = 1
+bulletType = SubResource("BulletType_8p4c3")
+poolCount = 10000
+fireRate = 0.084
+bulletsPerRadius = 10
+degreesBetweenRadii = 180.0
+maxSpin = 0.5
+minSpin = -2.0
+spinAcceleration = 1.0
+restartAtSpin = false
+trackedNode = NodePath("..")
+homingWeight = 0.1
+rowsInAtlas = 2
+columnsInAtlas = 2
+moveWithParent = false
+position = Vector2(-8, -377)
+texture = ExtResource("2_kmiho")
+
+[node name="PatternManager" type="Node" parent="."]
+script = ExtResource("3_4pmr3")
+data = Array[ExtResource("4_jgga3")]([SubResource("Resource_moc8b"), SubResource("Resource_a6w5m"), SubResource("Resource_v05yb"), SubResource("Resource_jjfu8")])
+
+[node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
+script = ExtResource("5_nco0f")
+topLeft = NodePath("Node2D")
+bottomRight = NodePath("Node2D2")
+
+[node name="Node2D" type="Node2D" parent="BulletBorder"]
+
+[node name="Node2D2" type="Node2D" parent="BulletBorder"]
+position = Vector2(1151, 647)
+
+[node name="AimedAtPlayer" type="Node" parent="."]
+
+[node name="tl" type="Spawner" parent="AimedAtPlayer" node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_hp6qd")
+ID = 2
+numberOfShots = 5
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+trackedNode = NodePath("../../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(138, 112)
+texture = ExtResource("2_kmiho")
+
+[node name="mid" type="Spawner" parent="AimedAtPlayer/tl" node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_s21wu")
+ID = 3
+numberOfShots = 10
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 4
+trackedNode = NodePath("../../../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(400, -19)
+texture = ExtResource("2_kmiho")
+
+[node name="tr" type="Spawner" parent="AimedAtPlayer" node_paths=PackedStringArray("trackedNode")]
+startMode = 1
+bulletType = SubResource("BulletType_1wf00")
+ID = 4
+numberOfShots = 5
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+trackedNode = NodePath("../../Player")
+startTowardPlayer = true
+offsetTowardPlayer = -45.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+position = Vector2(1017, 90)
+texture = ExtResource("2_kmiho")
+
+[connection signal="bullet_hit" from="Player/Time1" to="Player" method="_on_bullet_hit"]
+[connection signal="bullet_hit" from="AimedAtPlayer/tl" to="Player" method="_on_bullet_hit"]
+[connection signal="bullet_hit" from="AimedAtPlayer/tl/mid" to="Player" method="_on_bullet_hit"]
+[connection signal="bullet_hit" from="AimedAtPlayer/tr" to="Player" method="_on_bullet_hit"]

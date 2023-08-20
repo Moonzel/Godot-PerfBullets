@@ -102,11 +102,17 @@ void Spawner::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_columns_in_atlas", "columns"), &Spawner::set_columns_in_atlas);
     ClassDB::bind_method(D_METHOD("get_columns_in_atlas"), &Spawner::get_columns_in_atlas);
 
+    ClassDB::bind_method(D_METHOD("set_id", "id"), &Spawner::set_id);
+    ClassDB::bind_method(D_METHOD("get_id"), &Spawner::get_id);
+
     ClassDB::bind_method(D_METHOD("set_return_bullets_to_pool_automatically", "b"), &Spawner::set_return_bullets_to_pool_automatically);
     ClassDB::bind_method(D_METHOD("get_return_bullets_to_pool_automatically"), &Spawner::get_return_bullets_to_pool_automatically);
 
     ClassDB::bind_method(D_METHOD("set_start_mode", "mode"), &Spawner::set_start_mode);
     ClassDB::bind_method(D_METHOD("get_start_mode"), &Spawner::get_start_mode);
+
+    ClassDB::bind_method(D_METHOD("set_move_with_parent", "move"), &Spawner::set_move_with_parent);
+    ClassDB::bind_method(D_METHOD("get_move_with_parent"), &Spawner::get_move_with_parent);
 
     ClassDB::bind_method(D_METHOD("set_spawner_mode", "mode"), &Spawner::set_spawner_mode);
     ClassDB::bind_method(D_METHOD("get_spawner_mode"), &Spawner::get_spawner_mode);
@@ -118,6 +124,7 @@ void Spawner::_bind_methods() {
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "startMode", PROPERTY_HINT_ENUM, "ONSTART, PATTERNMANAGER"), "set_start_mode", "get_start_mode");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "spawnerMode", PROPERTY_HINT_ENUM, "PROCESS, PHYSICS"), "set_spawner_mode", "get_spawner_mode");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::OBJECT, "bulletType", PROPERTY_HINT_RESOURCE_TYPE, "BulletType"), "set_bullet_type", "get_bullet_type");
+    ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "ID"), "set_id", "get_id");
 
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "numberOfShots"), "set_number_of_shots", "get_number_of_shots");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "poolCount"), "set_pool_count", "get_pool_count");
@@ -152,6 +159,7 @@ void Spawner::_bind_methods() {
     ClassDB::add_property("Spawner", PropertyInfo(Variant::FLOAT, "randomRadius"), "set_random_radius", "get_random_radius");
 
     ClassDB::add_property_group("Spawner", "Misc.", "");
+    ClassDB::add_property("Spawner", PropertyInfo(Variant::BOOL, "moveWithParent"), "set_move_with_parent", "get_move_with_parent");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::BOOL, "returnBulletsToPoolAutomatically"), "set_return_bullets_to_pool_automatically", "get_return_bullets_to_pool_automatically");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::FLOAT, "textureRotation"), "set_texture_rotation", "get_texture_rotation");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::FLOAT, "gravity"), "set_gravity", "get_gravity");
@@ -164,6 +172,9 @@ void Spawner::_ready()
 {
     //This runs in the editor as well, so this check SHOULD only allow the main code to run after runtime
     if (!Engine::get_singleton()->is_editor_hint()){
+        
+        //Used to negate parent movement if moveWithParent is false
+        initialOffset = get_global_transform();
 
         if (get_multimesh() != nullptr){
             multi = get_multimesh();
@@ -194,16 +205,8 @@ void Spawner::_ready()
             UtilityFunctions::printerr("Shader could not be found, set the PerfBulletsAnimaiton shader to the Spawner");
         }
 
-        if (startMode == PATTERNMANAGER){
-            if (get_parent()->get_node_or_null("PatternManager") != nullptr){
-                get_parent()->get_node_or_null("PatternManager")->connect("start", Callable(this, "start_node"));
-            }
-            else {
-                UtilityFunctions::print("PatternManager not found");
-            }
-        }
-        else {
-            start_node(String(get_name()));
+        if (startMode != PATTERNMANAGER){
+            start_node(ID);
         }
     }
 }
@@ -213,10 +216,10 @@ Spawner::Spawner()
     connect("tree_exiting", Callable(this, "_on_tree_exiting"));
 }
 
-void Spawner::start_node(String nme){
+void Spawner::start_node(int id){
     //Runs when the node has been added to the scene if mode is ONSTART, otherwse runs when the timer in PatternManager times out
     //Checks if the argument is the name of the node (for PatternManager)
-    if (nme == get_name()) {
+    if (id == get_id()) {
         if (bulletType->get_scale() != 1.0) {
             Vector2 textSize = get_texture()->get_size();
             Ref<QuadMesh> customMesh = memnew(QuadMesh);
@@ -420,6 +423,10 @@ void Spawner::_process(float delta){
 void Spawner::_main(float delta)
 {   
     if (get_start() == true) {
+
+        if (moveWithParent == false){
+            set_global_transform(initialOffset);
+        }
 
     //If the timer has timed out, a new is spawned, based on all of the settings
           if (timer->is_stopped() == true){
@@ -844,6 +851,22 @@ void Spawner::set_return_bullets_to_pool_automatically(bool b) {
 
 bool Spawner::get_return_bullets_to_pool_automatically() const {
     return returnBulletsToPoolAutomatically;
+}
+
+void Spawner::set_id(int id) {
+    ID = id;
+}
+
+int Spawner::get_id() const {
+    return ID;
+}
+
+void Spawner::set_move_with_parent(bool move) {
+    moveWithParent = move;
+}
+
+bool Spawner::get_move_with_parent() const {
+    return moveWithParent;
 }
 
 void Spawner::set_start_mode(Spawner::StartMode mode) {

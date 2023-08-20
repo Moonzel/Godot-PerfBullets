@@ -14,6 +14,7 @@ func _physics_process(delta):
 	position += velocity * delta
 
 
-func _on_time_1_bullet_hit(result, bulletIndex, spawner):
+func _on_bullet_hit(result, bulletIndex, spawner):
 #	spawner.free_bullet_to_pool(bulletIndex) #can be used if returnBulletsToPoolAutomatically is false (see documentation on README)
 	print("hit ", result[0]["collider"])
+

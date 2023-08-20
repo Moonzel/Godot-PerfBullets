@@ -45,14 +45,16 @@ public:
     };
 
     enum StartMode {
-        ONSTART,
-        PATTERNMANAGER
+        ONSTART = 0,
+        PATTERNMANAGER = 1
     };
 
 private:
     //Export variables for the user to modifiy
     Spawner::StartMode startMode = ONSTART;
     Array bullets;
+    int ID = 1;
+    bool moveWithParent = true;
     Node2D *trackedNode = nullptr;
     Rect2 boundBox;
     bool start = false;
@@ -97,6 +99,7 @@ private:
     PhysicsDirectSpaceState2D* space_state = nullptr;
     int currentRow = 1;
     int currentColumn = 1;
+    Transform2D initialOffset;
 
 public:
     static void _bind_methods();
@@ -115,7 +118,7 @@ public:
 
     void _main(float delta);
 
-    void start_node(String nme);
+    void start_node(int id);
 
     void spawn_bullet_self(Vector2 dir);
 
@@ -224,6 +227,12 @@ public:
 
     void set_return_bullets_to_pool_automatically(bool b);
     bool get_return_bullets_to_pool_automatically() const;
+
+    void set_id(int id);
+    int get_id() const;
+
+    void set_move_with_parent(bool move);
+    bool get_move_with_parent() const;
 
     void set_start_mode(Spawner::StartMode mode);
     Spawner::StartMode get_start_mode() const;

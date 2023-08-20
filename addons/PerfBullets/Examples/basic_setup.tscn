@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://623ey52bh1c0"]
 
-[ext_resource type="Texture2D" uid="uid://bb41tvrma8x57" path="res://icon.svg" id="1_24rxq"]
+[ext_resource type="Texture2D" uid="uid://dmoxvyb57rtnh" path="res://icon.svg" id="1_24rxq"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="2_rde8o"]
 [ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="3_j2pef"]
 
@@ -8,7 +8,6 @@
 
 [sub_resource type="BulletType" id="BulletType_wcrsq"]
 _shape = SubResource("CircleShape2D_51srn")
-mask = 1
 
 [node name="Node2D" type="Node2D"]
 
@@ -27,3 +26,4 @@ bottomRight = NodePath("Node2D2")
 position = Vector2(604, 227)
 
 [node name="Player" parent="." instance=ExtResource("3_j2pef")]
+position = Vector2(77, 98)

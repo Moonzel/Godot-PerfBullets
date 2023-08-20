@@ -1,21 +1,28 @@
-[gd_scene load_steps=7 format=3 uid="uid://hlr5sueqo158"]
+[gd_scene load_steps=9 format=3 uid="uid://hlr5sueqo158"]
 
-[ext_resource type="Texture2D" uid="uid://bb41tvrma8x57" path="res://icon.svg" id="1_161g3"]
+[ext_resource type="Texture2D" uid="uid://dmoxvyb57rtnh" path="res://icon.svg" id="1_161g3"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="2_8av7u"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_j2p7r"]
 [ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="4_in8cm"]
+[ext_resource type="Script" path="res://PatternSpawnerData.gd" id="4_rea3k"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_o6m1g"]
 
 [sub_resource type="BulletType" id="BulletType_wcrsq"]
 _shape = SubResource("CapsuleShape2D_o6m1g")
-mask = 1
+
+[sub_resource type="Resource" id="Resource_i0xbe"]
+script = ExtResource("4_rea3k")
+ID = 256
+time = 2.0
+timerMode = 0
 
 [node name="Node2D" type="Node2D"]
 
 [node name="Spawner" type="Spawner" parent="."]
 startMode = 1
 bulletType = SubResource("BulletType_wcrsq")
+ID = 256
 texture = ExtResource("1_161g3")
 
 [node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
@@ -30,9 +37,7 @@ position = Vector2(604, 227)
 
 [node name="PatternManager" type="Node" parent="."]
 script = ExtResource("3_j2p7r")
-
-[node name="Spawner" type="Timer" parent="PatternManager"]
-wait_time = 1.5
-one_shot = true
+data = Array[ExtResource("4_rea3k")]([SubResource("Resource_i0xbe")])
 
 [node name="Player" parent="." instance=ExtResource("4_in8cm")]
+position = Vector2(94, 105)

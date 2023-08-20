@@ -1,16 +1,22 @@
-[gd_scene load_steps=7 format=3 uid="uid://c0vtdxn7ejeyq"]
+[gd_scene load_steps=9 format=3 uid="uid://c0vtdxn7ejeyq"]
 
 [ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="1_avarm"]
-[ext_resource type="Texture2D" uid="uid://e7x81ektkcjo" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_11ilv"]
+[ext_resource type="Texture2D" uid="uid://bq4fs3pbpvdwl" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_11ilv"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_m01w1"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="4_ajfw1"]
+[ext_resource type="Script" path="res://PatternSpawnerData.gd" id="4_iskhf"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_o13wm"]
 
 [sub_resource type="BulletType" id="BulletType_qanfv"]
 _shape = SubResource("CircleShape2D_o13wm")
 animationSpeed = 1.0
-mask = 1
+
+[sub_resource type="Resource" id="Resource_v3xfk"]
+script = ExtResource("4_iskhf")
+ID = 1
+time = 0.5
+timerMode = 0
 
 [node name="Game" type="Node2D"]
 position = Vector2(1, 1)
@@ -39,11 +45,7 @@ texture = ExtResource("2_11ilv")
 
 [node name="PatternManager" type="Node" parent="."]
 script = ExtResource("3_m01w1")
-
-[node name="Time1" type="Timer" parent="PatternManager"]
-process_callback = 0
-wait_time = 0.5
-one_shot = true
+data = Array[ExtResource("4_iskhf")]([SubResource("Resource_v3xfk")])
 
 [node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
 script = ExtResource("4_ajfw1")
@@ -55,4 +57,4 @@ bottomRight = NodePath("Node2D2")
 [node name="Node2D2" type="Node2D" parent="BulletBorder"]
 position = Vector2(1151, 647)
 
-[connection signal="bullet_hit" from="Time1" to="Player" method="_on_time_1_bullet_hit"]
+[connection signal="bullet_hit" from="Time1" to="Player" method="_on_bullet_hit"]
