@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="1_ayodl"]
 [ext_resource type="Texture2D" uid="uid://bq4fs3pbpvdwl" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_kmiho"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternManager.gd" id="3_4pmr3"]
-[ext_resource type="Script" path="res://PatternSpawnerData.gd" id="4_jgga3"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/PatternSpawnerData.gd" id="4_fy2dd"]
 [ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="5_nco0f"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jc7ax"]
@@ -13,25 +13,25 @@ _shape = SubResource("CircleShape2D_jc7ax")
 animationSpeed = 1.0
 
 [sub_resource type="Resource" id="Resource_moc8b"]
-script = ExtResource("4_jgga3")
+script = ExtResource("4_fy2dd")
 ID = 1
 time = 8.0
 timerMode = 0
 
 [sub_resource type="Resource" id="Resource_a6w5m"]
-script = ExtResource("4_jgga3")
+script = ExtResource("4_fy2dd")
 ID = 2
 time = 1.0
 timerMode = 0
 
 [sub_resource type="Resource" id="Resource_v05yb"]
-script = ExtResource("4_jgga3")
+script = ExtResource("4_fy2dd")
 ID = 3
 time = 4.0
 timerMode = 0
 
 [sub_resource type="Resource" id="Resource_jjfu8"]
-script = ExtResource("4_jgga3")
+script = ExtResource("4_fy2dd")
 ID = 4
 time = 6.0
 timerMode = 0
@@ -83,7 +83,7 @@ texture = ExtResource("2_kmiho")
 
 [node name="PatternManager" type="Node" parent="."]
 script = ExtResource("3_4pmr3")
-data = Array[ExtResource("4_jgga3")]([SubResource("Resource_moc8b"), SubResource("Resource_a6w5m"), SubResource("Resource_v05yb"), SubResource("Resource_jjfu8")])
+data = Array[ExtResource("4_fy2dd")]([SubResource("Resource_moc8b"), SubResource("Resource_a6w5m"), SubResource("Resource_v05yb"), SubResource("Resource_jjfu8")])
 
 [node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
 script = ExtResource("5_nco0f")

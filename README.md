@@ -28,23 +28,29 @@ The version included is pre-built for Windows
 
 ### The first six steps are *crucial* for the Spawner to work
 
-1. Make sure the `PerfBullets` plugin is activated in Project Settings
-2. Add a base scene node as a Node2D (or any other node deriving from that class)
-3. Add a Spawner node as a child
-4. Create a BulletType resource in the `Bullet Type` property
-5. Set the shape of that BulletType resource (for collision)
-6. Set the texture of the node in the MultiMeshInstance2D section of the node (or the sprite sheet if animating)
-#### The rest of the steps are optional but recommended to make full use of the plugin
-6. Add a BulletBorder node as the child of the main node
-7. Create two Noed2Ds as children of that node
-8. Select one of those nodes as the `TopLeft` property and one as the `BottomRight` property (this creates the border)
+1. Make sure the `PerfBullets` plugin is activated in Project Settings.
+2. Add a base scene node as a Node2D (or any other node deriving from that class).
+3. Add a Spawner node as a child.
+4. Create a BulletType resource in the `Bullet Type` property.
+5. Set the shape of that BulletType resource (for collision).
+6. Set the texture of the node in the MultiMeshInstance2D section of the node (or the sprite sheet if animating).
+#### The rest of the steps are optional but recommended to make full use of the plugin.
+6. Add a BulletBorder node as the child of the main node.
+7. Create two Noed2Ds as children of that node.
+8. Select one of those nodes as the `TopLeft` property and one as the `BottomRight` property (this creates the border).
 9. Add a PatternManager node
-10. For **EVERY** Spawner node in the scene, add a timer node as a child of the PatternManager with the *exact* name of the Spawner node (this is how the Spawner detects if the signal is for itself or another Spawner)
-11. Set the `one_shot` to true on the Timer
-12. If using PatternManager, change the Mode of the Spawner to `PATTERNMANAGER`
+10. For **EVERY** Spawner node in the scene, add a PatternSpawnerData resource.
+11. Set the ID of the Spawner, the time till it activates, and the mode of the Timer.
+12. If using PatternManager, change the Mode of the Spawner to `PATTERNMANAGER`.
+13. Select the Spawner and go to the Signals tab
+14. Add the `bullet_hit` signal to the node that will handle what happens to the bullet.
+	- There is the option to add multiple signals to the same function.
+ 	- When going to add the signal to the node that recieves the signal, press the button that says `pick`.
+	- Then press the function you wish to add it to, allowing for multiple Spawners to use the same signal.
+
 
 ### Here is what is supposed to look like:
-<img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/BasicDemo.gif" />
+<img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/BasicDemoUpdated.gif" />
 
 ## Examples
 In the repository, there is a folder named `examples` that holds a few examples you can build off of to make your games:
@@ -53,6 +59,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
  - `aimed_at_player`: This example shows how the Spawner can start in the direction of the player, using an offset to have the shot pointed directly at the player.
  - `basic_setup`: This example shows the most basic implementation of the Spawner, use this as a basis to start new patterns.
  - `basic_setup_with_PatternManager`: The same as the previous example but with the addition of PatternManager.
+ - `node_hierarchy`: This example shows how Spawners will work no matter who they are a child of, and can even remain stationary with a moving parent (see moveWithParent).
 
 ## Full Documentation
 
@@ -96,8 +103,10 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `gravity`: The amount of gravity added to the velocity of the bullet. Can be positive or negative.
 - `homing`: If the bullets should home towards the Node2D in the `trackedNode` property.
 - `homingWeight`: The amount of weight the homing has. The larger the number, the faster it will lock on to the tracked nodes's direction.
+- `ID`: The number used to activate certain Spawners with PatternManager. 
 - `maxSpin`: The maximum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
 - `minSpin`: The minimum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
+- `moveWithParent`: Whether or not the Spawner moves with the parent node. If `false`, the Spawner will be stationary, if `true`, it will change positions with the parent node. (This will move all of the bullets together since they are not children in the scene).  
 - `numberOfRadii`: The number of radii there are. This should usually be set to 1, but many more complex patterns can be made with this. 
 - `numberOfShots`: The number of times that the Spawner spawns a full shot, set to -1 to have it shoot indefinitely. 
 - `offsetTowardPlayer`: The offset of the radius against the `trackedNode`. It is there so once you select `startTowardPlayer` or `staysTowardPlayer`, you can have control if you want the Spawner to have the middle point at the `trackedNode` or the end. 
@@ -123,7 +132,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 <summary>Signals</summary>
 <br>
 
-- `bullet_hit`: An impotant signal. Returns three things: the result array, the index of the bullet, and the spawner. This can be used to control various aspects of the bullet when it is hit. If `returnBulletsToPoolAutomatically` is false, it can be done here (`spawner.free_bullet_to_pool(bulletIndex)`). It is also possible to spawn a different scene such as another type of bullet here. There could be a Area2D that when the bullet collides with it, certain properties are changed. 
+- `bullet_hit`: An impotant signal. Returns three things: the result array, the index of the bullet, and the spawner. This can be used to control various aspects of the bullet when it is hit. If `returnBulletsToPoolAutomatically` is false, it can be done here (`spawner.free_bullet_to_pool(bulletIndex)`). It is also possible to spawn a different scene such as another type of bullet here. There could be a Area2D that when the bullet collides with it, certain properties are changed. (See Basic Setup step 14 for another application of this signal).
 
 </details>
 
@@ -176,6 +185,22 @@ In the repository, there is a folder named `examples` that holds a few examples 
 #### This node is set up to be a place where you can control the timings of when each node is fired, usually placed at the same level in the scene as the Spawners. When you add a Spawner to the scene, you can add a corresponding Timer node as a child of the PatternManager. When this Timer times out, it will send a signal with its name (which should also be the EXACT name of the Spawner) and will activate it. You have the option of either using the PatternManager method or instantiating the nodes when you want to use them (`ONSTART`).
 
 <details>
+<summary>Properties</summary>
+<br>
+
+- `data`: An Array with one PatternSpawnerData per Spawner. It specifies when each Spawner will spawn, based on the time, ID, and timerMode properties of the PatternSpawnerData. 
+
+</details>
+
+<details>
+<summary>Methods</summary>
+<br>
+
+- `find_spawners(startingNode: Node) -> Array`: Takes in a node to start the search (usually the parent of the PatternManager), and recursively finds every Spawner node under the parent. It the adds it to an array to set up the rest of the PatternManager. 
+
+</details>
+
+<details>
 <summary>Signals</summary>
 <br>
 
@@ -197,6 +222,20 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `lifetime`: The amount of time the bullet has been active. Is reset every time it is readded to the pool. Is incremented up by delta every frame.
 - `animationTime`: The amount of time (in seconds) that has passed between every animation interval (the time between every frame change for animation)
 - `shapeRID`: The unique RID associated with the shape that is used to detect collision. Is not attached to any node or PhysicsBody, all of the calculations with collision are done via the Spawner. 
+
+</details>
+
+### @ PatternSpawnerData ![PatternSpawnerData](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/466f3252-5434-4977-83b4-9bc8ad571b2e)
+
+#### This is a resource that is used by PatternManager to hold data for which Spawners should activate when.
+
+<details>
+<summary>Properties</summary>
+<br>
+
+- `ID`: The `ID` of the Spawner, so it can be found in the tree.
+- `time`: The amount of time till the Spawner activates in seconds.
+- `timerMode`: Either Physics or Idle. It determines which mode the timer is run on. 
 
 </details>
 
