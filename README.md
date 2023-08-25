@@ -282,7 +282,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 #### Possible Errors
 
-- There could be an issue with SCons not selecting the correct compiler. Double check that there is not another softwre that is auto-setting the compiler to be incorrect.
+- There could be an issue with SCons not selecting the correct compiler. Double check that there is not another software that is auto-setting the compiler to be incorrect.
 - There could be a `.gdignore` file in the main folder which would be causing Godot to not be able to access the Classes. There IS supposed to be one in the `/src` folder.
 - Check the file placement and the locations in the SConstruct file.
 - If it is none of these, refer to the moshen zare videos referenced above. 
