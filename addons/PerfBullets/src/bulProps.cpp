@@ -8,6 +8,9 @@ void BulProps::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_position", "pos"), &BulProps::set_position);
     ClassDB::bind_method(D_METHOD("get_position"), &BulProps::get_position);
 
+    ClassDB::bind_method(D_METHOD("set_last_increment", "last"), &BulProps::set_last_increment);
+    ClassDB::bind_method(D_METHOD("get_last_increment"), &BulProps::get_last_increment);
+
     ClassDB::bind_method(D_METHOD("set_speed", "spd"), &BulProps::set_speed);
     ClassDB::bind_method(D_METHOD("get_speed"), &BulProps::get_speed);
 
@@ -28,6 +31,7 @@ void BulProps::_bind_methods() {
     
     ClassDB::add_property("BulProps", PropertyInfo(Variant::RID, "shapeRID"), "set_shape_rid", "get_shape_rid");
     ClassDB::add_property("BulProps", PropertyInfo(Variant::VECTOR2, "position"), "set_position", "get_position");
+    ClassDB::add_property("BulProps", PropertyInfo(Variant::VECTOR2, "last_increment"), "set_last_increment", "get_last_increment");
     ClassDB::add_property("BulProps", PropertyInfo(Variant::VECTOR2, "direction"), "set_direction", "get_direction");
     ClassDB::add_property("BulProps", PropertyInfo(Variant::FLOAT, "lifetime"), "set_lifetime", "get_lifetime");
     ClassDB::add_property("BulProps", PropertyInfo(Variant::FLOAT, "speed"), "set_speed", "get_speed");
@@ -45,6 +49,14 @@ void BulProps::set_position(Vector2 pos) {
 
 Vector2 BulProps::get_position() const {
     return position;
+}
+
+void BulProps::set_last_increment(Vector2 last) {
+    last_increment = last;
+}
+
+Vector2 BulProps::get_last_increment() const {
+    return last_increment;
 }
 
 void BulProps::set_direction(Vector2 dir) {

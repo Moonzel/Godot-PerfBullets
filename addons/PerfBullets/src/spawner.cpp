@@ -172,9 +172,6 @@ void Spawner::_ready()
 {
     //This runs in the editor as well, so this check SHOULD only allow the main code to run after runtime
     if (!Engine::get_singleton()->is_editor_hint()){
-        
-        //Used to negate parent movement if moveWithParent is false
-        initialOffset = get_global_transform();
 
         if (get_multimesh() != nullptr){
             multi = get_multimesh();
@@ -299,6 +296,7 @@ void Spawner::spawn_bullet_self(Vector2 dir) {
                 Ref<BulProps> bul = bullets[num];
                 //The position is local so 0,0 is always right
                 bul->set_position(Vector2(0,0));
+                bul->set_last_increment(get_global_position());
                 bul->set_direction(dir * bulletType->get_initial_speed());
                 bul->set_speed(bulletType->get_initial_speed());
 
@@ -423,11 +421,6 @@ void Spawner::_process(float delta){
 void Spawner::_main(float delta)
 {   
     if (get_start() == true) {
-
-        if (moveWithParent == false){
-            set_global_transform(initialOffset);
-        }
-
     //If the timer has timed out, a new is spawned, based on all of the settings
           if (timer->is_stopped() == true){
             if (count <= numberOfShots || numberOfShots == -1){
@@ -498,9 +491,14 @@ void Spawner::_main(float delta)
             int i = vis[i_internal];
             Vector2 upos = multi->get_instance_transform_2d(i).get_origin();
             Ref<BulProps> bul = bullets[i];
-            Vector2 uposCalc = bul->get_position();
             float ang;
             Vector2 velocity;
+
+            //Checks if the bullets move indpendently of the player
+            if (moveWithParent == false){
+                upos += (bul->get_last_increment()-get_global_position());
+                bul->set_last_increment(get_global_position());
+            }
 
             if (homing == false) {
                 ang = bul->get_direction().angle() + Math::deg_to_rad(textureRotation);
@@ -508,7 +506,7 @@ void Spawner::_main(float delta)
             }
 
             else{
-                Vector2 homingVector = uposCalc.direction_to(trackedNode->get_global_position()-get_global_position());
+                Vector2 homingVector = upos.direction_to(trackedNode->get_global_position()-get_global_position());
                 bul->set_direction(bul->get_direction() + (homingVector * (homingWeight/delta))/10);
                 velocity =  bul->get_direction() * bul->get_speed() * delta;
                 ang = velocity.angle() + Math::deg_to_rad(textureRotation);
@@ -519,7 +517,7 @@ void Spawner::_main(float delta)
             //Multiplying the velocity by 100 so settings can contain less decimals (User experience)
             multi->set_instance_transform_2d(i, Transform2D(ang, (upos + velocity/100)));
 
-            bul->set_position(uposCalc + velocity/100);
+            bul->set_position(upos + velocity/100);
             bul->set_lifetime(bul->get_lifetime()+delta);
             bul->set_animation_lifetime(bul->get_animation_lifetime()+delta);
             calc_vel(bul, delta);
@@ -535,7 +533,7 @@ void Spawner::_main(float delta)
                 }
             }
 
-            Vector2 toUse = to_global(uposCalc);
+            Vector2 toUse = to_global(upos);
 
             //If the bullet has gone past the killbox or the lifetime is up, make the bullet inactive
             if (boundBox != Rect2()){

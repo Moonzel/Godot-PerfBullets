@@ -54,7 +54,7 @@ private:
     Spawner::StartMode startMode = ONSTART;
     Array bullets;
     int ID = 1;
-    bool moveWithParent = true;
+    bool moveWithParent = false;
     Node2D *trackedNode = nullptr;
     Rect2 boundBox;
     bool start = false;
@@ -99,7 +99,6 @@ private:
     PhysicsDirectSpaceState2D* space_state = nullptr;
     int currentRow = 1;
     int currentColumn = 1;
-    Transform2D initialOffset;
 
 public:
     static void _bind_methods();

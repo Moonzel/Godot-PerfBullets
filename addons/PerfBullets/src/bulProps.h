@@ -21,6 +21,7 @@ class BulProps : public Resource {
 
 private:
     Vector2 position = Vector2();
+    Vector2 last_increment = Vector2();
     Vector2 direction = Vector2();
     float speed = 0.0;
     float lifetime = 0.0;
@@ -40,6 +41,9 @@ public:
 
     void set_position(Vector2 pos);
     Vector2 get_position() const;
+
+    void set_last_increment(Vector2 pos);
+    Vector2 get_last_increment() const;
 
     void set_direction(Vector2 dir);
     Vector2 get_direction() const;

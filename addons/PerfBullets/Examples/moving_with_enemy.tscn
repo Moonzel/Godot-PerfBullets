@@ -1,0 +1,97 @@
+[gd_scene load_steps=14 format=3 uid="uid://7wfgj7elk1q7"]
+
+[ext_resource type="Script" path="res://addons/PerfBullets/Examples/moving_with_enemy.gd" id="1_8xb1d"]
+[ext_resource type="Texture2D" uid="uid://bqdjo5yxxlw22" path="res://icon.svg" id="1_g0w4q"]
+[ext_resource type="Texture2D" uid="uid://c5x15cffw1yd0" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_f7hcb"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="4_v8qsx"]
+[ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="5_fhnh6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_mece3"]
+font_size = 32
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_eyxgv"]
+size = Vector2(123, 122)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vg32x"]
+radius = 30.0
+
+[sub_resource type="BulletType" id="BulletType_44454"]
+initialSpeed = 200.0
+_shape = SubResource("CircleShape2D_vg32x")
+
+[sub_resource type="QuadMesh" id="QuadMesh_h187i"]
+size = Vector2(75, 75)
+
+[sub_resource type="MultiMesh" id="MultiMesh_b2lt3"]
+mesh = SubResource("QuadMesh_h187i")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rayqn"]
+radius = 20.0
+
+[sub_resource type="BulletType" id="BulletType_fehes"]
+initialSpeed = 200.0
+_shape = SubResource("CircleShape2D_rayqn")
+mask = 2
+
+[node name="moving_with_enemy" type="Node2D"]
+script = ExtResource("1_8xb1d")
+
+[node name="Enemy" type="Area2D" parent="."]
+position = Vector2(122, 172)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Label" type="Label" parent="Enemy"]
+offset_left = -22.0
+offset_top = -111.0
+offset_right = 18.0
+offset_bottom = -63.0
+text = "0"
+label_settings = SubResource("LabelSettings_mece3")
+horizontal_alignment = 1
+
+[node name="enemySprite" type="Sprite2D" parent="Enemy"]
+position = Vector2(-1, 2)
+texture = ExtResource("1_g0w4q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
+position = Vector2(-0.5, 0)
+shape = SubResource("RectangleShape2D_eyxgv")
+
+[node name="EnemySpawner" type="Spawner" parent="Enemy"]
+bulletType = SubResource("BulletType_44454")
+ID = 2
+fireRate = 0.75
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+startRotation = 225.0
+moveWithParent = false
+gravity = 4.0
+multimesh = SubResource("MultiMesh_b2lt3")
+texture = ExtResource("1_g0w4q")
+
+[node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
+script = ExtResource("4_v8qsx")
+topLeft = NodePath("Node2D")
+bottomRight = NodePath("Node2D2")
+
+[node name="Node2D" type="Node2D" parent="BulletBorder"]
+
+[node name="Node2D2" type="Node2D" parent="BulletBorder"]
+position = Vector2(1152, 647)
+
+[node name="Player" parent="." instance=ExtResource("5_fhnh6")]
+collision_mask = 0
+
+[node name="Spawner" type="Spawner" parent="Player"]
+bulletType = SubResource("BulletType_fehes")
+fireRate = 0.25
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 3
+startRotation = 225.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+moveWithParent = false
+texture = ExtResource("2_f7hcb")
+
+[connection signal="bullet_hit" from="Player/Spawner" to="." method="_on_spawner_bullet_hit"]
