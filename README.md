@@ -60,6 +60,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
  - `basic_setup`: This example shows the most basic implementation of the Spawner, use this as a basis to start new patterns.
  - `basic_setup_with_PatternManager`: The same as the previous example but with the addition of PatternManager.
  - `node_hierarchy`: This example shows how Spawners will work no matter who they are a child of, and can even remain stationary with a moving parent (see moveWithParent).
+ - `moving_with_enemy`: This example demonstrates how the bullets can move independently of their parent, and how a sample enemy would function. It shows the player shooting the enemy, and logging collisions. 
 
 ## Full Documentation
 
@@ -217,6 +218,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 <br>
 
 - `position`: The LOCAL position of the bullet (from its Spawner node).
+- `last_increment`: Every frame, the distance between the bullet and the current spawner `global_position` is calculated, and then the difference of `last_increment` is added to the position of the bullet. This allows `moveWithParent` to function.
 - `direction`: The Vector2 that describes the direction that the bullet is traveling. 
 - `speed`: The amount that is multiplied by the direction to produce the velocity of the bullet.
 - `lifetime`: The amount of time the bullet has been active. Is reset every time it is readded to the pool. Is incremented up by delta every frame.
