@@ -1,7 +1,7 @@
 # Godot PerfBullets
 ![PerfBulletsLogo - Copy](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/e3c2392a-09f8-4cf9-b98b-f213b233ae62)
 
-## Spawn thousands of bullets or particles on screen in an extremely performant way!
+## Spawn thousands of bullets or particles on screen while optimizing performance!
 
 <p align="center">
   <img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/HomingDemo.gif" width="480" />
@@ -9,7 +9,7 @@
   <img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/StressDemo.gif" width="480" />
 </p>
 
-This plugin is for **GDExtension** and works with Godot 4.1. Only with Mobile or Forward+ renderers.<br>
+This plugin is for **GDExtension** and works with Godot 4.1 and 4.2. Only with Mobile or Forward+ renderers.<br>
 
 The version included is pre-built for Windows
 
