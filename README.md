@@ -60,7 +60,8 @@ In the repository, there is a folder named `examples` that holds a few examples 
  - `basic_setup`: This example shows the most basic implementation of the Spawner, use this as a basis to start new patterns.
  - `basic_setup_with_PatternManager`: The same as the previous example but with the addition of PatternManager.
  - `node_hierarchy`: This example shows how Spawners will work no matter who they are a child of, and can even remain stationary with a moving parent (see moveWithParent).
- - `moving_with_enemy`: This example demonstrates how the bullets can move independently of their parent, and how a sample enemy would function. It shows the player shooting the enemy, and logging collisions. 
+ - `moving_with_enemy`: This example demonstrates how the bullets can move independently of their parent, and how a sample enemy would function. It shows the player shooting the enemy, and logging collisions.
+ - `manual_start`: This example shows how `MANUAL` start mode works. It is used to have the player shoot bullets by pressing a button.
 
 ## Full Documentation
 
@@ -105,6 +106,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `homing`: If the bullets should home towards the Node2D in the `trackedNode` property.
 - `homingWeight`: The amount of weight the homing has. The larger the number, the faster it will lock on to the tracked nodes's direction.
 - `ID`: The number used to activate certain Spawners with PatternManager. 
+- `manualStart`: This is not in the inspector. This property can be set to true using `set_manual_start` to control when the `Spawner` fires using the `MANUAL` mode. 
 - `maxSpin`: The maximum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
 - `minSpin`: The minimum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
 - `moveWithParent`: Whether or not the Spawner moves with the parent node. If `false`, the Spawner will be stationary, if `true`, it will change positions with the parent node. (This will move all of the bullets together since they are not children in the scene).  
@@ -120,7 +122,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `spawnerMode`: Can either be PHYSICS or PROCESS. PHYSICS uses the `_physics_process` for all of the calculations, and PROCESS uses the `_process` for all of the calculations.
 - `spinAcceleration`: An amount that is added to the spin every frame. It can be negative or positive.
 - `spinRate`: The starting amount of spin. Can be modified by `spinAcceleration`.
-- `startMode`: Can either be `ONSTART` or `PATTERNMANAGER`. Nothing is run on the node until it is started. `ONSTART` starts the node as soon as it is added to the tree, and `PATTERNMANAGER` starts the node when the Timer in PatternManager is timed out. 
+- `startMode`: Can either be `ONSTART` or `PATTERNMANAGER` or `MANUAL`. Nothing is run on the node until it is started. `ONSTART` starts the node as soon as it is added to the tree, and `PATTERNMANAGER` starts the node when the Timer in PatternManager is timed out. `MANUAL` allows an indivudal shot to activate by setting the `manualStart` property to true.
 - `startRotation`: The rotation that the Spawner starts with, in degrees. This is an arbitrary number used in calculations, and you SHOULD NOT edit the actual rotation of the Spawner node.
 - `startTowardPlayer`: The starting rotation of the Spawner node is set to look at the `targetNode`. This is set automatically, and an offset can be added with `offsetTowardPlayer`.
 - `staysTowardPlayer`: The rotation of the Spawner node is constantly changed to look at the `targetNode`. This is set automatically, and an offset can be added with `offsetTowardPlayer`.

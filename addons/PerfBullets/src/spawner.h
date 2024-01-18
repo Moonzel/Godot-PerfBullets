@@ -46,7 +46,8 @@ public:
 
     enum StartMode {
         ONSTART = 0,
-        PATTERNMANAGER = 1
+        PATTERNMANAGER = 1,
+        MANUAL = 2
     };
 
 private:
@@ -86,6 +87,7 @@ private:
     int rowsInAtlas = 1;
     int columnsInAtlas = 1;
     bool returnBulletsToPoolAutomatically = true;
+    bool manualStart = false;
 
     //Variables for the user to not modify; Used internally
     Timer *timer = nullptr;
@@ -238,6 +240,9 @@ public:
 
     void set_spawner_mode(Spawner::Mode mode);
     Spawner::Mode get_spawner_mode() const;
+
+    void set_manual_start(bool b);
+    bool get_manual_start() const;
 };
 
 VARIANT_ENUM_CAST(Spawner::Mode);

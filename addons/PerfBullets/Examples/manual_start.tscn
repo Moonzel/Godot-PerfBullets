@@ -1,0 +1,37 @@
+[gd_scene load_steps=6 format=3 uid="uid://bmri8ipcr28yy"]
+
+[ext_resource type="PackedScene" uid="uid://duq34uom7vsr6" path="res://addons/PerfBullets/Examples/player.tscn" id="1_354w6"]
+[ext_resource type="Texture2D" uid="uid://dxxev4cmkw85d" path="res://addons/PerfBullets/test_bullet_animation_sheet.png" id="2_t4mid"]
+[ext_resource type="Script" path="res://addons/PerfBullets/GDScript_Classes/BulletBorder.gd" id="4_qwddb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8splg"]
+
+[sub_resource type="BulletType" id="BulletType_yiogt"]
+initialSpeed = 150.0
+_shape = SubResource("CircleShape2D_8splg")
+mask = 2
+
+[node name="manual_start" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_354w6")]
+
+[node name="PlayerShot" type="Spawner" parent="Player"]
+startMode = 2
+bulletType = SubResource("BulletType_yiogt")
+ID = 2
+fireRadiusDegrees = 90.0
+bulletsPerRadius = 5
+startRotation = -135.0
+rowsInAtlas = 2
+columnsInAtlas = 2
+texture = ExtResource("2_t4mid")
+
+[node name="BulletBorder" type="Node2D" parent="." node_paths=PackedStringArray("topLeft", "bottomRight")]
+script = ExtResource("4_qwddb")
+topLeft = NodePath("Node2D")
+bottomRight = NodePath("Node2D2")
+
+[node name="Node2D" type="Node2D" parent="BulletBorder"]
+
+[node name="Node2D2" type="Node2D" parent="BulletBorder"]
+position = Vector2(1152, 648)

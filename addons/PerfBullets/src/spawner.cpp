@@ -117,11 +117,14 @@ void Spawner::_bind_methods() {
     ClassDB::bind_method(D_METHOD("set_spawner_mode", "mode"), &Spawner::set_spawner_mode);
     ClassDB::bind_method(D_METHOD("get_spawner_mode"), &Spawner::get_spawner_mode);
 
+    ClassDB::bind_method(D_METHOD("set_manual_start", "b"), &Spawner::set_manual_start);
+    ClassDB::bind_method(D_METHOD("get_manual_start"), &Spawner::get_manual_start);
+
     ClassDB::bind_method(D_METHOD("get_active_bullets"), &Spawner::get_active_bullets);
 
     //Properties that the user will see as export variables
     //These properties are in the order that is displayed in the node
-    ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "startMode", PROPERTY_HINT_ENUM, "ONSTART, PATTERNMANAGER"), "set_start_mode", "get_start_mode");
+    ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "startMode", PROPERTY_HINT_ENUM, "ONSTART, PATTERNMANAGER, MANUAL"), "set_start_mode", "get_start_mode");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "spawnerMode", PROPERTY_HINT_ENUM, "PROCESS, PHYSICS"), "set_spawner_mode", "get_spawner_mode");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::OBJECT, "bulletType", PROPERTY_HINT_RESOURCE_TYPE, "BulletType"), "set_bullet_type", "get_bullet_type");
     ClassDB::add_property("Spawner", PropertyInfo(Variant::INT, "ID"), "set_id", "get_id");
@@ -422,7 +425,8 @@ void Spawner::_main(float delta)
 {   
     if (get_start() == true) {
     //If the timer has timed out, a new is spawned, based on all of the settings
-          if (timer->is_stopped() == true){
+          if ((timer->is_stopped() == true && startMode != StartMode::MANUAL) || (manualStart == true)){
+            manualStart = false;
             if (count <= numberOfShots || numberOfShots == -1){
                 float step;
                 if (fireRadiusDegrees != 360) {
@@ -637,6 +641,9 @@ Array Spawner::get_bullets() const {
 
 void Spawner::set_fire_rate(float rate) {
     fireRate = rate;
+    if (timer != nullptr){
+        timer->set_wait_time(fireRate);
+    }
 }
 
 float Spawner::get_fire_rate() const {
@@ -881,4 +888,12 @@ void Spawner::set_spawner_mode(Spawner::Mode mode) {
 
 Spawner::Mode Spawner::get_spawner_mode() const {
     return spawnerMode;
+}
+
+void Spawner::set_manual_start(bool b) {
+    manualStart = b;
+}
+
+bool Spawner::get_manual_start() const {
+    return manualStart;
 }

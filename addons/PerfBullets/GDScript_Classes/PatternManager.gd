@@ -7,6 +7,7 @@ class_name PatternManager
 ##The signal that activates each spawner once the timer has run out
 signal start(node_id: int)
 
+##The Array that houses each of the Spawners controlled by the PatternManager
 @export var data: Array[PatternSpawnerData]
 var spawners: Array
 
@@ -25,10 +26,10 @@ func _ready():
 		timer.process_mode = i.timerMode
 		timer.name = str(spawnerToUse.get_id())
 		add_child(timer)
-		timer.connect("timeout", Callable(self, "emit").bind(spawnerToUse.get_id()))
+		timer.connect("timeout", Callable(self, "emit_ready").bind(spawnerToUse.get_id()))
 		timer.start()
 
-func emit(node_id:int):
+func emit_ready(node_id:int):
 	emit_signal("start", node_id)
 
 ## Will find all of the spawners in the scene starting from the parent of the PatternManager
