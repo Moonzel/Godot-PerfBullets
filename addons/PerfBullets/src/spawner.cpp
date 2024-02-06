@@ -719,7 +719,9 @@ float Spawner::get_texture_rotation() const {
 
 void Spawner::set_start_rotation(float rot){
     startRotation = rot;
+    fRotation = Math::deg_to_rad(startRotation);
 }
+
 float Spawner::get_start_rotation() const {
     return startRotation;
 }
