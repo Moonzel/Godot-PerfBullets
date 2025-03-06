@@ -1,7 +1,7 @@
 # Godot PerfBullets
 ![PerfBulletsLogo - Copy](https://github.com/Moonzel/Godot-PerfBullets/assets/96361809/e3c2392a-09f8-4cf9-b98b-f213b233ae62)
 
-## Spawn thousands of bullets or particles on screen in an extremely performant way!
+## Spawn thousands of bullets or particles on screen while optimizing performance!
 
 <p align="center">
   <img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/HomingDemo.gif" width="480" />
@@ -9,9 +9,9 @@
   <img src="https://github.com/Moonzel/Public_Gifs_For_Projects_Moonzel/blob/main/StressDemo.gif" width="480" />
 </p>
 
-This plugin is for **GDExtension** and works with Godot 4.1. Only with Mobile or Forward+ renderers.<br>
+This plugin is for **GDExtension** and works with Godot 4.1 and 4.2. Only with Mobile or Forward+ renderers.<br>
 
-The version included is pre-built for Windows
+The version included is pre-built for Windows for [OSX/Linux](#osxlinux)
 
 ## Main Features
 
@@ -45,7 +45,7 @@ The version included is pre-built for Windows
 13. Select the Spawner and go to the Signals tab
 14. Add the `bullet_hit` signal to the node that will handle what happens to the bullet.
 	- There is the option to add multiple signals to the same function.
- 	- When going to add the signal to the node that recieves the signal, press the button that says `pick`.
+ 	- When going to add the signal to the node that receives the signal, press the button that says `pick`.
 	- Then press the function you wish to add it to, allowing for multiple Spawners to use the same signal.
 
 
@@ -60,6 +60,8 @@ In the repository, there is a folder named `examples` that holds a few examples 
  - `basic_setup`: This example shows the most basic implementation of the Spawner, use this as a basis to start new patterns.
  - `basic_setup_with_PatternManager`: The same as the previous example but with the addition of PatternManager.
  - `node_hierarchy`: This example shows how Spawners will work no matter who they are a child of, and can even remain stationary with a moving parent (see moveWithParent).
+ - `moving_with_enemy`: This example demonstrates how the bullets can move independently of their parent, and how a sample enemy would function. It shows the player shooting the enemy, and logging collisions.
+ - `manual_start`: This example shows how `MANUAL` start mode works. It is used to have the player shoot bullets by pressing a button.
 
 ## Full Documentation
 
@@ -104,6 +106,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `homing`: If the bullets should home towards the Node2D in the `trackedNode` property.
 - `homingWeight`: The amount of weight the homing has. The larger the number, the faster it will lock on to the tracked nodes's direction.
 - `ID`: The number used to activate certain Spawners with PatternManager. 
+- `manualStart`: This is not in the inspector. This property can be set to true using `set_manual_start` to control when the `Spawner` fires using the `MANUAL` mode. 
 - `maxSpin`: The maximum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
 - `minSpin`: The minimum amount the Spawner can spin, it either peaks at the value, or restarts and spins the other way (see restartAtSpin).
 - `moveWithParent`: Whether or not the Spawner moves with the parent node. If `false`, the Spawner will be stationary, if `true`, it will change positions with the parent node. (This will move all of the bullets together since they are not children in the scene).  
@@ -119,7 +122,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 - `spawnerMode`: Can either be PHYSICS or PROCESS. PHYSICS uses the `_physics_process` for all of the calculations, and PROCESS uses the `_process` for all of the calculations.
 - `spinAcceleration`: An amount that is added to the spin every frame. It can be negative or positive.
 - `spinRate`: The starting amount of spin. Can be modified by `spinAcceleration`.
-- `startMode`: Can either be `ONSTART` or `PATTERNMANAGER`. Nothing is run on the node until it is started. `ONSTART` starts the node as soon as it is added to the tree, and `PATTERNMANAGER` starts the node when the Timer in PatternManager is timed out. 
+- `startMode`: Can either be `ONSTART` or `PATTERNMANAGER` or `MANUAL`. Nothing is run on the node until it is started. `ONSTART` starts the node as soon as it is added to the tree, and `PATTERNMANAGER` starts the node when the Timer in PatternManager is timed out. `MANUAL` allows an indivudal shot to activate by setting the `manualStart` property to true.
 - `startRotation`: The rotation that the Spawner starts with, in degrees. This is an arbitrary number used in calculations, and you SHOULD NOT edit the actual rotation of the Spawner node.
 - `startTowardPlayer`: The starting rotation of the Spawner node is set to look at the `targetNode`. This is set automatically, and an offset can be added with `offsetTowardPlayer`.
 - `staysTowardPlayer`: The rotation of the Spawner node is constantly changed to look at the `targetNode`. This is set automatically, and an offset can be added with `offsetTowardPlayer`.
@@ -217,6 +220,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 <br>
 
 - `position`: The LOCAL position of the bullet (from its Spawner node).
+- `last_increment`: Every frame, the distance between the bullet and the current spawner `global_position` is calculated, and then the difference of `last_increment` is added to the position of the bullet. This allows `moveWithParent` to function.
 - `direction`: The Vector2 that describes the direction that the bullet is traveling. 
 - `speed`: The amount that is multiplied by the direction to produce the velocity of the bullet.
 - `lifetime`: The amount of time the bullet has been active. Is reset every time it is readded to the pool. Is incremented up by delta every frame.
@@ -253,6 +257,21 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 </details>
 
+## OSX/Linux
+### Use these steps to use this project on MacOS or Linux.
+#### These are general steps rather than a step-by-step set of instructions.
+##### Thanks to @dimonenka and @PedroG98 for the help with these steps!
+##### (Note: These steps have not been thoroughly tested at this time, if you run into any problems, please report them as an issue)
+1. Download `scons` and `godot-cpp`
+2. Place the `godot-cpp` folder inside `addons/PerfBullets` (as instructed in the instructions to edit the plugin)
+3. Compile `godot-cpp` for linux by running scons on `addons/PerfBullets/godot-cpp`
+4. Compile `PerfBullets` for linux by running scons on `addons/PerfBullets`
+5. The file `libspawner.[linux/macos].template_debug.x86_64.so` will be generated in `addons/PerfBullets/bin`
+6. The file `addons/PerfBullets/spawner.gdextension` needs to be changed, because it only accepts sharedlibs with the name `spawner.platform`. Open it and write libspawner instead of spawner for your platform of choice (in this case line 14)
+7. If the generated file is not directly is in the bin directory, move it there
+8. Edit the `.gdextension` file and make sure it is pointing to the correct place
+9. Open Godot and start programming!
+
 ## Instructions for Editing the Plugin
 ### You may come to the point in your project that needs a specific feature that is not included in the base plugin. If this happens, you can edit the plugin yourself.
 
@@ -282,7 +301,7 @@ In the repository, there is a folder named `examples` that holds a few examples 
 
 #### Possible Errors
 
-- There could be an issue with SCons not selecting the correct compiler. Double check that there is not another softwre that is auto-setting the compiler to be incorrect.
+- There could be an issue with SCons not selecting the correct compiler. Double check that there is not another software that is auto-setting the compiler to be incorrect.
 - There could be a `.gdignore` file in the main folder which would be causing Godot to not be able to access the Classes. There IS supposed to be one in the `/src` folder.
 - Check the file placement and the locations in the SConstruct file.
 - If it is none of these, refer to the moshen zare videos referenced above. 
